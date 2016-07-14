@@ -1,5 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
+using TorrentTracker.Core.Commands;
+using TorrentTracker.Core.Entities.Media;
+using TorrentTracker.Core.Interface.CQRS;
 using TorrentTracker.Core.Interface.ExternalServices;
 
 namespace TorrentTrackerAPI.Controllers
@@ -7,9 +11,11 @@ namespace TorrentTrackerAPI.Controllers
     public class ShowsController : ApiController
     {
         private readonly IMovieService _movieservice;
-        public ShowsController(IMovieService movieservice)
+        private readonly IAsyncCommandHandler<ScanShows, IEnumerable<Show>> _handler;
+        public ShowsController(IMovieService movieservice, IAsyncCommandHandler<ScanShows, IEnumerable<Show>> handler)
         {
             _movieservice = movieservice;
+            _handler = handler;
         }
 
         public IHttpActionResult Get()
@@ -33,6 +39,17 @@ namespace TorrentTrackerAPI.Controllers
         public async Task<IHttpActionResult> SearchShow(string searchText)
         {
             return Ok(await _movieservice.SearchShow(searchText, true));
+        }
+
+        [Route("Shows/Scan")]
+        public async Task<IHttpActionResult> ScanFolderForShows(List<string> foldersToScan)
+        {
+            ScanShows scanShows = new ScanShows()
+            {
+                FoldersToScan = foldersToScan
+            };
+
+            return Ok(await _handler.Handle(scanShows));
         }
     }
 }

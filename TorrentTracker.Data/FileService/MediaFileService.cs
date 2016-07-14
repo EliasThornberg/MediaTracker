@@ -4,17 +4,21 @@ using TorrentTracker.Core.Interface.ApplicationService;
 
 namespace TorrentTracker.Data.FileService
 {
-    public class MediaFileService : IMediaFileService
+    public class MediaFileService : IMediaFileService<MediaInfo>
     {
-        public List<string> GetMediaFiles(string[] foldersToScan)
+        public IEnumerable<MediaInfo> GetMediaFiles(string[] foldersToScan)
         {
-            List<string> files = new List<string>();
             foreach(var folder in foldersToScan)
             {
-                files.AddRange(Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories));
-            }
+                var files = Directory.EnumerateFiles(folder, "*.avi", SearchOption.AllDirectories);
+                foreach(var file in files)
+                {
+                    var cleanFilename = FilenameCleaner.Clean(Path.GetFileNameWithoutExtension(file));
+                    var mediaInfo = new MediaInfo(cleanFilename);
 
-            return files;
+                    yield return mediaInfo;
+                }
+            }
         }
     }
 }

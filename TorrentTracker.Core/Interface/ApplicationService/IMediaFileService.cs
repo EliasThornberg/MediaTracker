@@ -2,8 +2,8 @@
 
 namespace TorrentTracker.Core.Interface.ApplicationService
 {
-    public interface IMediaFileService
+    public interface IMediaFileService<T>
     {
-        List<string> GetMediaFiles(string[] foldersToScan);
+        IEnumerable<T> GetMediaFiles(string[] foldersToScan);
     }
 }

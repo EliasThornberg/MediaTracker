@@ -48,6 +48,10 @@
   <ItemGroup>
     <Compile Include="Common\Cache.cs" />
     <Compile Include="FileService\MediaFileService.cs" />
+    <Compile Include="FileService\MediaInfo.cs" />
+    <Compile Include="FileService\FilenameCleaner.cs" />
+    <Compile Include="FileService\ScanMoviesHandler.cs" />
+    <Compile Include="FileService\ScanShowsHandler.cs" />
     <Compile Include="OMDbApi\Client\ITMDBClient.cs" />
     <Compile Include="OMDbApi\Client\TMDBClient.cs" />
     <Compile Include="OMDbApi\Models\Find\FindEpisode.cs" />

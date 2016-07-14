@@ -11,6 +11,7 @@ namespace TorrentTrackerAPI.DependencyInject
             {
                 c.AddRegistry<ServiceRegistry>();
                 c.AddRegistry<CommonRegistry>();
+                c.AddRegistry<HandlerRegistry>();
             });
         }
     }
